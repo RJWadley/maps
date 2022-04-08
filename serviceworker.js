@@ -1,9 +1,4 @@
 //service worker
-import { precacheAndRoute } from "workbox-precaching";
-
-declare let self: ServiceWorkerGlobalScope;
-
-precacheAndRoute(self.__WB_MANIFEST);
 
 //intercept fetch
 self.addEventListener("fetch", function (event) {
@@ -15,15 +10,15 @@ self.addEventListener("fetch", function (event) {
   }
 });
 
-let centerCoordinates = (xFromUrl: number, yFromUrl: number, zoom: number) => {
-  let width = 2 ** zoom;
-  let newX = xFromUrl - width / 2;
-  let newY = yFromUrl - width / 2;
+centerCoordinates = (xFromUrl, yFromUrl, zoom) => {
+  width = 2 ** zoom;
+  newX = xFromUrl - width / 2;
+  newY = yFromUrl - width / 2;
 
   return [newX, newY];
 };
 
-let getTileUrl = (coords: { x: number; y: number; z: number }) => {
+getTileUrl = (coords) => {
   let Zcoord = 2 ** (8 - coords.z);
   let Xcoord = coords.x * 1;
   let Ycoord = coords.y * -1;
@@ -44,18 +39,18 @@ let getTileUrl = (coords: { x: number; y: number; z: number }) => {
     zzz += "z";
   }
 
-  if (zzz.length > 0) zzz += "_";
+  if (zzz.length != "") zzz += "_";
 
   let url = `https://dynmap.minecartrapidtransit.net/tiles/new/flat/${group.x}_${group.y}/${zzz}${numberInGroup.x}_${numberInGroup.y}.png`;
   return url;
 };
 
 // Respond to the request with a new image
-let handleRequest = async (request: Request) => {
+handleRequest = async (request) => {
   //get the coordinates from the pathname
   let url = new URL(request.url);
   let coords = url.pathname.split("/").slice(1);
-  let z = Math.abs(14 - parseInt(coords[0]));
+  let z = Math.abs(14 - coords[0]);
   let x = parseInt(coords[1]);
   let y = parseInt(coords[2]);
 
@@ -64,7 +59,7 @@ let handleRequest = async (request: Request) => {
   let shiftFactor = 2 ** z;
   y += shiftFactor;
 
-  let newCoords = centerCoordinates(x, y, parseInt(coords[0]));
+  let newCoords = centerCoordinates(x, y, coords[0]);
 
   //convert to imageurl
   let imageUrl = getTileUrl({ x: newCoords[0], y: newCoords[1], z: z });
