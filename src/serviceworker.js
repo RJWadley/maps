@@ -39,7 +39,7 @@ getTileUrl = (coords) => {
     zzz += "z";
   }
 
-  if (zzz.length != "") zzz += "_";
+  if (zzz.length != 0) zzz += "_";
 
   let url = `https://dynmap.minecartrapidtransit.net/tiles/new/flat/${group.x}_${group.y}/${zzz}${numberInGroup.x}_${numberInGroup.y}.png`;
   return url;
