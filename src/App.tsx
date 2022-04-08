@@ -5,7 +5,8 @@ import logo from "./logo.svg";
 function App() {
   const [count, setCount] = useState(0);
 
-  return <TheMap />;
+  return <div>test</div>;
+  // <TheMap />;
 }
 
 export default App;
