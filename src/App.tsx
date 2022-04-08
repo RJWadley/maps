@@ -1,6 +1,6 @@
 import { useState } from "react";
 import TheMap from "./components/Map";
-import logo from "./logo.svg";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 function App() {
   const [count, setCount] = useState(0);
