@@ -7,6 +7,9 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      strategies: "injectManifest",
+      srcDir: "",
+      filename: "sw.ts",
       devOptions: {
         enabled: true,
       },
