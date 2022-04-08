@@ -23,13 +23,26 @@ export default function TheMap() {
             id: "simple-tiles",
             type: "raster",
             source: "raster-tiles",
-            minzoom: 14,
-            maxzoom: 22,
+            // minzoom: 14,
+            // maxzoom: 22,
           },
         ],
       },
       center: [0, 0], // starting position
       zoom: 19, // starting zoom
+    });
+
+    map.on("load", () => {
+      // add a sky layer that will show when the map is highly pitched
+      map.addLayer({
+        id: "sky",
+        type: "sky",
+        paint: {
+          "sky-type": "atmosphere",
+          "sky-atmosphere-sun": [0.0, 0.0],
+          "sky-atmosphere-sun-intensity": 15,
+        },
+      });
     });
   });
 
