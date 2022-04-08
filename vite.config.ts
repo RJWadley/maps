@@ -5,14 +5,13 @@ import { VitePWA } from "vite-plugin-pwa";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
     VitePWA({
-      strategies: "injectManifest",
       srcDir: "",
       filename: "sw.ts",
       devOptions: {
         enabled: true,
       },
     }),
+    react(),
   ],
 });
