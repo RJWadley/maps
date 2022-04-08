@@ -41,6 +41,7 @@ getTileUrl = (coords) => {
   if (zzz.length != 0) zzz += "_";
 
   let url = `https://dynmap.minecartrapidtransit.net/tiles/new/flat/${group.x}_${group.y}/${zzz}${numberInGroup.x}_${numberInGroup.y}.png`;
+
   return url;
 };
 
@@ -55,7 +56,6 @@ handleRequest = async (event) => {
   let y = parseInt(coords[2]);
 
   //shift the image to match mapboxes expected coordinates
-  let invertedZ = Math.abs(z - 8);
   let shiftFactor = 2 ** z;
   y += shiftFactor;
 
@@ -64,10 +64,38 @@ handleRequest = async (event) => {
   //convert to imageurl
   let imageUrl = getTileUrl({ x: newCoords[0], y: newCoords[1], z: z });
 
-  //respond to the event with the image
-  event.respondWith(
-    fetch(imageUrl).then((response) => {
-      return response;
-    })
-  );
+  //if the zoome is out of bounds, return a blank 32x32 black png image
+  if (parseInt(coords[0]) > 13) {
+    //respond to the event with the image
+
+    event.respondWith(
+      caches.open("tile-images").then(function (cache) {
+        return cache.match(event.request).then(function (response) {
+          return (
+            response ||
+            fetch(imageUrl).then(function (response) {
+              cache.put(event.request, response.clone());
+              return response;
+            })
+          );
+        });
+      })
+    );
+  }
 };
+
+// self.addEventListener("fetch", function (event) {
+//   event.respondWith(
+//     caches.open("mysite-dynamic").then(function (cache) {
+//       return cache.match(event.request).then(function (response) {
+//         return (
+//           response ||
+//           fetch(event.request).then(function (response) {
+//             cache.put(event.request, response.clone());
+//             return response;
+//           })
+//         );
+//       });
+//     })
+//   );
+// });
