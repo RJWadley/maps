@@ -9,25 +9,19 @@
       //register serviceworker.js
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {
-          navigator.serviceWorker
-            .register(
-              window.hostname == "localhost"
-                ? "serviceworker.js"
-                : "https://raw.githubusercontent.com/RJWadley/maps/master/serviceworker.js"
-            )
-            .then(
-              function (registration) {
-                // Registration was successful
-                console.log(
-                  "ServiceWorker registration successful with scope: ",
-                  registration.scope
-                );
-              },
-              function (err) {
-                // registration failed :(
-                console.log("ServiceWorker registration failed: ", err);
-              }
-            );
+          navigator.serviceWorker.register("serviceworker.js").then(
+            function (registration) {
+              // Registration was successful
+              console.log(
+                "ServiceWorker registration successful with scope: ",
+                registration.scope
+              );
+            },
+            function (err) {
+              // registration failed :(
+              console.log("ServiceWorker registration failed: ", err);
+            }
+          );
         });
       }
     </script>
