@@ -4,9 +4,8 @@
 self.addEventListener("fetch", function (event) {
   //check if the request is for a tile
   if (event.request.url.includes("tileserver")) {
-    handleRequest(event.request).then((response) => {
-      event.respondWith(response);
-    });
+    // event.respondWith(new Response("Hello from Service Worker!"));
+    handleRequest(event);
   }
 });
 
@@ -46,7 +45,8 @@ getTileUrl = (coords) => {
 };
 
 // Respond to the request with a new image
-handleRequest = async (request) => {
+handleRequest = async (event) => {
+  let request = event.request;
   //get the coordinates from the pathname
   let url = new URL(request.url);
   let coords = url.pathname.split("/").slice(1);
@@ -64,7 +64,10 @@ handleRequest = async (request) => {
   //convert to imageurl
   let imageUrl = getTileUrl({ x: newCoords[0], y: newCoords[1], z: z });
 
-  //respond to the request with the image
-  // let response = await fetch(imageUrl);
-  return Response.redirect(imageUrl);
+  //respond to the event with the image
+  event.respondWith(
+    fetch(imageUrl).then((response) => {
+      return response;
+    })
+  );
 };

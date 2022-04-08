@@ -13,7 +13,7 @@ export default function TheMap() {
         sources: {
           "raster-tiles": {
             type: "raster",
-            tiles: ["https://{tileserver}/{z}/{x}/{y}.jpg"],
+            tiles: ["/{z}/{x}/{y}/tileserver.png"],
             tileSize: 128,
             attribution: "MRT-MAP",
           },
